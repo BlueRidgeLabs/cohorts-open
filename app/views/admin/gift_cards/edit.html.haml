@@ -1,0 +1,7 @@
+%h1.ui.header.page-header
+  Editing Gift Card
+  = @gift_card.id
+= link_to 'Show', admin_gift_card_path(@gift_card), class: 'ui button'
+= link_to 'Back', admin_gift_cards_path, class: 'ui button'
+%br/
+= render 'form'

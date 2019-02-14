@@ -1,0 +1,14 @@
+$("#contact-#{@contact.id}").remove();
+$('#contacts').prepend("#{j render partial: 'admin/people/contact', locals: { contact: @contact }}");
+$("#contact-#{@contact.id}").find('.pencil.icon').click(function() {
+$contact = $(this).parents('.notes').find('.text');
+text = $contact.attr('data-contact-notes');
+action = $contact.attr('data-edit-action');
+$contact.empty();
+$contact.append('<form class="edit-contact-form ui form" data-remote="true"></form>');
+$contact.find('.edit-contact-form').attr('action', action).attr('method', 'put').append('<div class="field"><div class="ui fluid action input"><input type="text" name="contact[notes]" id="contact_notes"><div class="ui green submit button" type="submit"><i class="edit icon"></i>Update</div></div></div>')
+$contact.find('#contact_notes').val(text);
+$contact.find('.ui.submit.button').click(function() {
+$(this).parents('form').submit();
+});
+});

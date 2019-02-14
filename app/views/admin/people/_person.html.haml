@@ -1,0 +1,17 @@
+%tr
+  %td= link_to private_information(person, name: true), admin_person_path(person)
+  %td= private_information(person.email_address)
+  %td= private_information(person.phone_number)
+  %td.center.aligned= person.submissions.count
+  %td= person.signup_at.strftime('%D %r') if person.signup_at
+  %td
+    - if person.signup_form
+      = link_to person.signup_form.name, "https://adhocteamus.wufoo.com/forms/#{person.signup_form.url}"
+    - else
+      unknown
+  %td= person.comments.last&.content
+  %td
+    - if person.last_contacted
+      = person.last_contacted.strftime('%D %r')
+    - else 
+      uncontacted

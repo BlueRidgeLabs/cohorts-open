@@ -1,0 +1,14 @@
+$("#comment-#{@comment.id}").remove();
+$('#comments').prepend("#{j render partial: 'admin/people/comment', locals: { comment: @comment }}");
+$("#comment-#{@comment.id}").find('.pencil.icon').click(function() {
+$comment = $(this).parents('.content').find('.text');
+text = $comment.attr('data-comment-content');
+action = $comment.attr('data-edit-action');
+$comment.empty();
+$comment.append('<form class="edit-comment-form ui form" data-remote="true"></form>');
+$comment.find('.edit-comment-form').attr('action', action).attr('method', 'put').append('<div class="field"><div class="ui fluid action input"><input type="text" name="comment[content]" id="comment_content"><div class="ui green submit button" type="submit"><i class="edit icon"></i>Update</div></div></div>')
+$comment.find('#comment_content').val(text);
+$comment.find('.ui.submit.button').click(function() {
+$(this).parents('form').submit();
+});
+});

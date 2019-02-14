@@ -1,0 +1,8 @@
+.ui.clearing.vertical.segment
+  %h1.ui.left.floated.header
+    Edit Checklist
+
+.ui.vertical.segment
+  = form_for @checklist, url: admin_checklist_path(@checklist), html: {class: 'ui form'} do |f|
+    = render 'form_fields', f: f
+    %button.ui.green.button Edit Checklist

@@ -1,0 +1,155 @@
+.ui.clearing.vertical.segment
+  .ui.right.floated.header
+    = link_to "#", class: "ui tiny green button", id: "filter-button" do
+      %i.icon.filter
+      Filter
+    .ui.tiny.button.popup-button#save-search-button{ 'data-html': "<form class='ui form' action='/admin/saved_searches' method='post'><div class='field'><label for='saved_search_label'>Label</label><input type='text' name='saved_search[label]' id='saved_search_label' /><input type='hidden' name='saved_search[query]' id='saved_search_query' value='#{@q}' /></div><div class='field'><input type='submit' class='ui green button' id='save-search-submit-button' commit='Save' /></div></form>" }
+      %i.save.icon
+      Save Search
+    .ui.tiny.button.popup-button#bulk-tag-button{ 'data-html': "<form class='ui form' action='/admin/taggings/bulk_create' method='post'><div class='field'><label for='tagging_name'>Tag Name</label><input type='text' name='tagging[name]' id='tagging_name' />#{raw @results.records.where(active: true).map { |r| "<input type='hidden' name='tagging[taggable_ids][]' id='taggable_taggable_ids' value='#{r.id}' />"}.join}</div><div class='field'><input type='submit' class='ui green button' id='bulk-tag-submit-button' commit='Save' /></div></form>" }
+      %i.tag.icon
+      Bulk Tag
+    .ui.tiny.button.modal-show#message-members
+      %i.mail.icon
+      Message
+    .ui.modal#message-members
+      .header Message members
+      .content
+        = form_for EmailMessage.new, url: admin_email_messages_path, method: :post, html: { class: 'ui form' } do |f|
+          .field
+            = label_tag :to
+            - if @q.present?
+              = select_tag :to, options_for_select(@options, @options), class: 'ui dropdown', multiple: true
+            - else
+              = select_tag :to, options_for_select(@options), class: 'ui dropdown', multiple: true
+          .field
+            = f.label :subject
+            = f.text_field :subject
+          .field
+            = f.label :body
+            = f.trix_editor :body
+      .actions
+        .ui.positive.submit.button Send
+        .ui.deny.button Cancel
+    = link_to search_admin_people_path(q: @q, format: :csv), class: "ui tiny button" do
+      %i.icon.download
+      Export CSV
+    = form_tag({action: :import_csv}, multipart: true, class: "ui tiny button", id: 'import-csv-form') do
+      .ui.tiny.buttons
+        .ui.left.attached.button.fake-file-field
+          %span.button-text Import CSV
+        = file_field_tag "file", accept: 'text/csv', style: "display:none"
+        = button_tag type: 'submit', class: 'right attached ui icon button', id: "import-csv-submit", data: { confirm: 'These people will be uploaded to Cohorts. Are you sure you want to continue?' } do
+          %i.upload.icon{style: "margin-right: 0"}
+  %h1.ui.left.floated.header
+    Members
+    .sub.header
+      = page_entries_info @people, entry_name: 'members'
+
+.ui.vertical.secondary.padded.segment#filter-section
+  %h4.ui.green.header
+    Filters
+    .sub.header Use an asterisk to indicate "contains" or "starts with". e.g. *hicago
+  = form_tag search_admin_people_path, method: 'get', class: "ui form" do
+    .ui.grid
+      .equal.width.row
+        .column
+          .field
+            = label_tag "Search all fields (name, email, etc...)"
+            = text_field_tag :all, nil, name: nil
+          .two.fields
+            .field
+              = label_tag "Has tags"
+              = select_tag :has_tags, options_for_select(Tag.all.map {|t| [t.name, t.name]}), { multiple: true, class: 'ui search selection dropdown', name: nil }
+            .field
+              = label_tag "Does not have tags"
+              = select_tag :does_not_have_tags, options_for_select(Tag.all.map {|t| [t.name, t.name]}), { multiple: true, class: 'ui search selection dropdown', name: nil }
+          .two.fields
+            .field
+              = label_tag "Has trait"
+              = select_tag :has_trait, options_for_select(Trait.all.map {|t| [t.name, t.name]}), { multiple: true, class: 'ui search selection dropdown', name: nil }
+            .field
+              = label_tag "Trait value equals"
+              = select_tag :trait_value_equals, options_for_select(PersonTrait.all.map {|t| [t.value, t.value]}.uniq), { multiple: true, class: 'ui search selection dropdown', name: nil }
+          .two.fields
+            .field
+              = label_tag "Does not have trait"
+              = select_tag :does_not_have_trait, options_for_select(Trait.all.map {|t| [t.name, t.name]}.uniq), { multiple: true, class: 'ui search selection dropdown', name: nil }
+            .field
+              = label_tag "Trait value equals"
+              = select_tag :trait_value_doesnt_equal, options_for_select(PersonTrait.all.map {|t| [t.value, t.value]}.uniq), { multiple: true, class: 'ui search selection dropdown', name: nil }
+          .field
+            = label_tag "Date of last participation"
+            .ui.right.labeled.input
+              = select_tag :lp_comparator, options_for_select([['greater than', '<'],['less than', '>']]), { class: 'ui no-clear compact dropdown' }
+              = number_field_tag :lp_months
+              .ui.label months ago
+          .field
+            = label_tag "Signed up"
+            .ui.right.labeled.input
+              = select_tag :su_comparator, options_for_select([['less than', '>'],['greater than', '<']]), { class: 'ui no-clear compact dropdown' }
+              = number_field_tag :su_days
+              .ui.label days ago
+          .field
+            = label_tag "Date of last contact"
+            .ui.right.labeled.input
+              = select_tag :lc_comparator, options_for_select([['less than', '>'],['greater than', '<']]), { class: 'ui no-clear compact dropdown' }
+              = number_field_tag :lc_days
+              .ui.label days ago
+        .divider-column
+          .ui.vertical.divider
+        .column
+          .field
+            = label_tag "Has answered survey question"
+            = select_tag :question, options_for_select(Question.all.map {|q| [q.text, q.id]}.push(['', nil]), ['', nil]), { class: 'ui search selection dropdown non-fuzzy', name: nil }
+          .two.fields
+            .field
+              = label_tag "Answer equals"
+              = select_tag :answer_equals, nil, { multiple: true, class: 'ui search selection remote-answers dropdown', name: nil }
+            .field
+              = label_tag "Answer does not equal"
+              = select_tag :answer_does_not_equal, nil, { multiple: true, class: 'ui search selection remote-answers dropdown', name: nil }
+          .two.fields
+            .field
+              = label_tag "Answer contains"
+              = select_tag :answer_contains, nil, { multiple: true, class: 'ui search selection remote-choices dropdown', name: nil }
+            .field
+              = label_tag "Answer does not contain"
+              = select_tag :answer_does_not_contain, nil, { multiple: true, class: 'ui search selection remote-choices dropdown', name: nil }
+      .equal.width.row
+        .right.aligned.column
+          = hidden_field_tag :q, @q
+          = submit_tag "Search", class: "ui green button", name: nil
+          = button_tag "Clear Form", type: :reset, class: "ui basic button"
+
+- if @people.any?
+  %table.ui.striped.table
+    %thead
+      %tr
+        %th
+          = sortable("first_name", "Name")
+          %i{class: nil || class_assignment("first_name")}
+        %th
+          = sortable("email_address","Email")
+          %i{class: nil || class_assignment("email_address")}
+        %th
+          = sortable("phone_number","Phone")
+          %i{class: nil || class_assignment("phone_number")}
+        %th
+          = sortable("submissions")
+          %i{class: nil || class_assignment("submission")}
+        %th
+          = sortable("signup_at","Signed Up")
+          %i{class: nil || class_assignment("signup_at")}
+        %th 
+          = sortable("signup_form_id","Signup Form")
+          %i{class: nil || class_assignment("signup_form_id")}
+        %th Most recent note
+        %th
+          = sortable("last_contacted","Last Contacted")
+          %i{class: nil || class_assignment("last_contacted")}
+
+    %tbody
+      = render @people
+
+  = paginate @people

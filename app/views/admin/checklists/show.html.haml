@@ -1,0 +1,26 @@
+.ui.clearing.vertical.segment
+  .ui.right.floated.header
+    = link_to edit_admin_engagement_research_session_path(@engagement, @research_session), class: "ui tiny basic button" do
+      %i.edit.icon
+      Edit Session
+  %h1.ui.left.floated.header
+    Session:
+    = @research_session.datetime.strftime('%b %e, %Y at %l:%M %p')
+
+.ui.vertical.segment
+  .ui.list
+    .item
+      .header Client
+      .description
+        = link_to @research_session.client.name, admin_client_path(@research_session.client)
+    .item
+      .header Engagement
+      .description
+        = link_to @research_session.engagement.topic, admin_engagement_path(@research_session.engagement)
+    .item
+      .header Members
+      .description
+        = raw @research_session.people.collect { |person| link_to person.full_name, admin_person_path(person) }.join("<br/>")
+    .item
+      .header Notes
+      .description= @research_session.notes

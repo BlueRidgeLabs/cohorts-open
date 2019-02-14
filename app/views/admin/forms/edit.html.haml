@@ -1,0 +1,15 @@
+%h2.ui.header
+  Settings for
+  = surround '"', '"' do
+    = @form.name
+
+= form_for @form, url: admin_form_path(@form), html: {class: 'ui form'} do |f|
+  .field
+    = f.label :twilio_keyword
+    = f.text_field :twilio_keyword
+  .field
+    .ui.checkbox
+      = f.check_box :hidden
+      = f.label :hidden, 'Hidden?'
+  .field
+    = f.submit 'Update', class: 'ui green button'

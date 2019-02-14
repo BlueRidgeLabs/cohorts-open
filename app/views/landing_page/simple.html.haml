@@ -1,0 +1,16 @@
+= content_for(:facebook_meta) do
+  %meta{ property: 'og:url', content: landing_page_url(@landing_page.tag.name) }
+  %meta{ property: 'og:title', content: 'Sign up for Cohorts' }
+  %meta{ property: 'og:description', content: @landing_page.lede }
+  %meta{ property: 'og:image', content: @landing_page.image.present? ? @landing_page.image.url : image_url('banner.png') }
+
+.container
+  #signup.form.simple
+    .row.intro
+      = content_or_default(@landing_page&.body) do
+        %h2 Earn money, give feedback.<br>Make government better.
+        %p Using government websites can be frustrating. Your feedback will make these online tools better for millions of people.
+        %p Sign up and we'll immediately send you a <strong>$5 VISA gift card</strong>. After you participate in any feedback sessions (usually 30 minutes), we'll send you a <strong>$25 VISA gift card</strong>.
+
+    .row
+      = render "wufoo"

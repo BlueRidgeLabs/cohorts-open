@@ -1,0 +1,39 @@
+.logo {
+  width: 15em;
+  height: 4.1em;
+}
+
+.ui.sidebar.vertical.menu {
+  padding-top: 4.1em;
+  border-left: 0;
+  z-index: 1;
+
+  .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 1em;
+    font-size: 0.75em;
+  }
+}
+
+.ui.top.fixed.menu {
+  z-index: 1;
+
+  .search {
+    flex: 1;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+
+    form,
+    form > div {
+      width: 100%;
+    }
+  }
+}
+
+.avatar {
+  display: inline-block;
+  border-radius: 100%;
+  margin-right: 0.75em !important;
+}

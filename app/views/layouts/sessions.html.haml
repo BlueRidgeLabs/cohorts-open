@@ -1,0 +1,27 @@
+!!!
+%html{lang: "en"}
+  %head
+    %title
+      Cohorts | #{title = yield(:page_title); title.present? ? title : controller_name.humanize.titlecase}
+    = stylesheet_link_tag "sessions", media: "all", "data-turbolinks-track" => true
+    = javascript_include_tag "admin", "data-turbolinks-track" => true
+    = render 'application/favicon'
+    %meta{charset: "utf-8"}/
+    %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}/
+    %meta{content: "True", name: "HandheldFriendly"}/
+    %meta{content: "320", name: "MobileOptimized"}/
+    %meta{content: "website", property: "og:type"}/
+    %meta{content: "", name: "description"}/
+    %meta{content: "en_US", property: "og:locale"}/
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = csrf_meta_tags
+    = render "shared/typekit"
+  %body.sessions
+    .ui.middle.aligned.center.aligned.grid
+      .column
+        .ui.header.center.aligned
+          %span.logo{role: "banner"}
+            Cohorts
+        .ui.segment.left.aligned
+          = render "shared/flash"
+          = yield

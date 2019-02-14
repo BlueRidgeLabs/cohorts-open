@@ -1,0 +1,28 @@
+- if @landing_page
+  = content_for(:facebook_meta) do
+    %meta{ property: 'og:url', content: landing_page_url(@landing_page.tag.present? ? @landing_page.tag.name : @landing_page) }
+    %meta{ property: 'og:title', content: 'Sign up for Cohorts' }
+    %meta{ property: 'og:description', content: @landing_page.lede }
+    %meta{ property: 'og:image', content: @landing_page.image.present? ? @landing_page.image.url : image_url('banner.png') }
+
+.hero{"data-image" => (@landing_page&.image if @landing_page&.image.present?)}
+  .row
+    %h1
+      %span
+        = content_or_default(@landing_page&.lede) do
+          Join Cohorts, a group of people who earn money by giving feedback on government websites
+    %a.btn{href: "#signup"} Join Now
+  .hero-background
+
+.container
+  .main{role: "main"}
+    .row
+      = content_or_default(@landing_page&.body) do
+        %h2 Earn money, give feedback.<br>Make government better.
+        %p Using government websites can be frustrating. Your feedback will make these online tools better for millions of people.
+        %p Sign up and become a member of Cohorts. After you participate in any feedback session (usually 30 minutes), we'll send you a <strong>$25 VISA gift card</strong>.
+
+.container
+  #signup.form
+    .row
+      = render "wufoo"

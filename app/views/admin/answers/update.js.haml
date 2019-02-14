@@ -1,0 +1,15 @@
+$("#answer-#{@answer.id}").remove();
+$('#answers').prepend("#{j render partial: 'admin/answers/answer', locals: { answer: @answer }}");
+$("#answer-#{@answer.id}").find('.pencil.icon').click(function() {
+$value = $(this).parents('.answer-value-cell').find('.answer-value');
+text = $value.attr('data-value-content');
+action = $value.attr('data-edit-action');
+form_html = $value.attr('data-edit-form-html');
+$value.empty();
+$value.append('<form class="edit-answer-value-form ui form" data-remote="true"></form>');
+$value.find('.edit-answer-value-form').attr('action', action).attr('method', 'put').append(form_html)
+$value.find('#value_content').val(text);
+$value.find('.ui.submit.button').click(function() {
+$(this).parents('form').submit();
+});
+});

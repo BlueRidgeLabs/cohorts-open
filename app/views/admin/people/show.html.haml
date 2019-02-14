@@ -1,0 +1,287 @@
+- content_for :page_title, @person.initials
+.ui.grid
+  .equal.width.row
+    .column
+      %h1.ui.header.page-header
+        %abbr= private_information @person, name: true
+    .right.aligned.column
+      .ui.icon.buttons
+        = link_to admin_people_path, class: 'ui tooltippy left attached icon button', title: 'Back' do
+          %i.left.arrow.icon
+        = link_to edit_admin_person_path(@person), class: 'ui tooltippy attached icon button', title: 'Edit' do
+          %i.edit.icon
+        = link_to deactivate_admin_people_path(@person), method: :post,
+        data: { confirm: t('.confirm', default: t("helpers.links.confirm", default: 'Are you sure?')) },
+        class: 'ui tooltippy attached icon button', title: 'Deactivate' do
+          %i.hide.icon
+        = link_to admin_person_path(@person), method: 'delete',
+        data: { confirm: t('.confirm', default: t("helpers.links.confirm", default: 'Are you sure?')) },
+        class: 'ui tooltippy right attached icon button', title: 'Delete' do
+          %i.delete.icon
+.ui.divider
+.ui.padded.grid
+  .row
+    .four.wide.column
+      %h3.ui.header Contact
+      .ui.relaxed.list
+        .item
+          %i.marker.icon
+          .content
+            .header Address
+            .description{ class: session[:privacy_mode] ? 'private-information' : '' }
+              = private_information address_fields_to_sentence(@person)
+        .item
+          %i.phone.icon
+          .content
+            .header Phone
+            .description{ class: session[:privacy_mode] ? 'private-information' : '' }
+              = private_information @person.phone_number
+        .item
+          %i.mail.icon
+          .content
+            .header Email
+            .description{ class: session[:privacy_mode] ? 'private-information' : '' }
+              = private_information @person.email_address
+        .item
+          %i.text.telephone.icon
+          .content
+            .header Preferred Contact Method
+            .description= @person.preferred_contact_method
+        .item
+          %i.facebook.icon
+          .content
+            .header Facebook
+            .description link to facebook
+        .item
+          %i.twitter.icon
+          .content
+            .header Twitter
+            .description link to twitter
+        .item
+          %i.browser.icon
+          .content
+            .header Signup form
+            .description
+              - if @person.signup_form
+                = link_to @person.signup_form.name, "https://adhocteamus.wufoo.com/forms/#{@person.signup_form.url}"
+              - else
+                unknown
+        .item
+          %i.history.icon
+          .content
+            .header Signup at
+            .description= @person.signup_at ? @person.signup_at.to_s(:long) : 'unknown'
+        .item
+          %i.history.icon
+          .content
+            .header Last Contacted
+            .description= @person.last_contacted ? @person.last_contacted.to_s(:long) : 'unknown'
+    .four.wide.column
+      %h3.ui.header About
+      .ui.relaxed.list
+        .item
+          %i.help.circle.icon
+          .content
+            .header Verified?
+            .description= best_in_place @person, :verified, url: admin_person_path(@person)
+        - if @person.geography_id.present?
+          .item
+            %i.street.view.icon
+            .content
+              .header Ward
+              .description= link_to @person.geography_id, search_admin_people_path(q: "geography_id:#{@person.geography_id}")
+        .item
+          %i.desktop.icon
+          .content
+            .header Primary device
+            .description
+              = best_in_place @person, :primary_device_description, url: admin_person_path(@person)
+              %span.muted
+                (#{best_in_place @person, :primary_device_id, as: :select, collection:  Cohorts::Application.config.device_mappings.collect{|i| [i.last, i.first]}, url: admin_person_path(@person)})
+        .item
+          %i.mobile.icon
+          .content
+            .header Secondary device
+            .description
+              = best_in_place @person,:secondary_device_description, url: admin_person_path(@person)
+              %span.muted
+                (#{best_in_place @person, :secondary_device_id, as: :select, collection:  Cohorts::Application.config.device_mappings.collect{|i| [i.last, i.first]}, url: admin_person_path(@person)})
+        .item
+        .item
+          %i.wifi.icon
+          .content
+            .header Primary connection method
+            .description
+              = best_in_place @person,:primary_connection_description, url: admin_person_path(@person)
+              %span.muted
+                (#{best_in_place @person, :primary_connection_id , as: :select, collection: Cohorts::Application.config.connection_mappings.collect{|i| [i.last,i.first.to_s.humanize]}, url: admin_person_path(@person)})
+        .item
+          %i.signal.icon
+          .content
+            .header Secondary connection method
+            .description
+              = best_in_place @person,:secondary_connection_description, url: admin_person_path(@person)
+              %span.muted
+                (#{best_in_place @person, :secondary_connection_id , as: :select, collection: Cohorts::Application.config.connection_mappings.collect{|i| [i.last,i.first.to_s.humanize]}, url: admin_person_path(@person)})
+        .item
+          %i.comments.icon
+          .content
+            .header Preferred participation method
+            .description= best_in_place @person, :participation_type, as: :select, collection: %w(in-person remote), url: admin_person_path(@person)
+    .eight.wide.column
+      %h3.ui.header Location
+      .ui.grid
+        .equal.width.row
+          .center.aligned.column
+            - if session[:privacy_mode]
+              %i.massive.protect.icon
+            -else
+              - if @person.address?
+                %a{href: "https://maps.google.com?q=#{CGI.escape(address_fields_to_sentence(@person)).html_safe}", target: "_blank", title: "View in Google Maps"}
+                  %img.google-map{src: "https://maps.googleapis.com/maps/api/staticmap?markers=|#{CGI.escape(address_fields_to_sentence(@person)).html_safe}&zoom=14&size=540x270&sensor=false&key=#{ENV["GOOGLE_API_KEY"]}".html_safe}/
+              - else
+                %img.google-map{src: "https://maps.googleapis.com/maps/api/staticmap?zoom=1&size=540x270&sensor=false&key=#{ENV["GOOGLE_API_KEY"]}".html_safe}/
+  .equal.width.row
+    .column
+      %h3.ui.header Statistics
+      .ui.tiny.green.statistic#gift_card_total
+        .value
+          %i.dollar.icon
+          = humanized_money @person.gift_card_total
+        .label total sent
+  .equal.width.row
+    .column
+      %h3.ui.header Tags
+      = form_for(@tagging, url: admin_taggings_path, remote: true, html: { class: "ui form" }) do |f|
+        = f.hidden_field :taggable_type, value: "Person"
+        = f.hidden_field :taggable_id, value: @person.id
+        .field
+          .ui.action.input#add-tag-field
+            = f.select :name, Tag.order(:name).map { |t| [t.name, t.name] }, {include_blank: 'New tag'}, { class: 'ui fluid search selection dropdown allow-addition auto-add' }
+            .ui.green.submit.button#add-tag-button{ type: 'submit' }
+              %i.tag.icon
+              Add
+      .ui.green.labels#tag-list
+        = render partial: 'admin/taggings/tagging', collection: @person.taggings.select {|tag| !tag.tag_id.nil?}
+    .column
+      %h3.ui.header Traits
+      = form_for([@person, @trait], url: admin_person_traits_path(@person, @trait), remote: true, html: { class: "ui form", id: 'add-person-trait-form' }) do |f|
+        .fields
+          .six.wide.field
+            = f.select :name, Trait.order(:name).map { |t| [t.name, t.name] }, {include_blank: 'Trait'}, { class: 'ui fluid search selection dropdown' }
+          .six.wide.field
+            = text_field_tag 'person_trait[value]', nil, placeholder: 'Value'
+          .four.wide.field
+            .ui.fluid.green.submit.button{ type: 'submit' }
+              %i.tags.icon
+              Add
+      = form_for([@person, @trait], url: admin_person_traits_path(@person, @trait), method: :patch, remote: true, html: { class: "ui form", id: 'update-person-trait-form' }) do |f|
+        .fields
+          .six.wide.field
+            = f.select :name, Trait.order(:name).map { |t| [t.name, t.name] }, {include_blank: 'Trait'}, { class: 'ui fluid disabled dropdown' }
+          .six.wide.field
+            = text_field_tag 'person_trait[value]', nil, placeholder: 'Value'
+          .four.wide.field
+            .ui.fluid.green.submit.button{ type: 'submit' }
+              %i.tags.icon
+              Update
+      .ui.green.labels#trait-list
+        = render partial: 'admin/traits/person_trait', collection: @person.person_traits
+  .equal.width.row
+    .column
+      %h3.ui.header Contact - Notes
+      = form_for([@person, @comment], url: admin_person_comments_path(@person,@comment), remote: true, html: { class: "ui form" }) do |form|
+        .fields
+          .fifteen.wide.field.input#add-contact-notes-field
+            = form.text_field :content,placeholder: 'New contact note'
+          .ui.checkbox
+            = form.check_box :contact_check, {id:'contact-check'}
+            %label Contact Note?
+          .four.wide.field#contact-type-hidden
+            = form.select :contact_type, ["phone","email","text","in-person"], {include_blank: 'Contact Type'}, { class: 'ui fluid dropdown' }
+            = form.hidden_field :commentable_type, value: 'Person'
+            = form.hidden_field :commentable_id, value: @person.id
+          .four.wide.field
+            .ui.fluid.green.submit.button#contact-submit{ type: 'submit',tabindex:0 }
+              %i.edit.icon
+              Add
+  .equal.width.row
+    .column
+      %h3.ui.header Notes
+      .ui.comments#comments
+        = render partial: 'comment', collection: @person.comments.order("created_at DESC")
+    .column
+      %h3.ui.header Contact History
+      .ui.comments#contacts
+        = render partial: 'contact', collection: @person.contacts.order("created_at DESC")
+  .equal.width.row
+    .column
+      %h3.ui.header
+        Gift Cards
+      #error-div
+      = form_for([@person, @gift_card], url: admin_gift_cards_path, remote: true, html: { class: 'ui form' }) do |form|
+        - if @gift_card.errors.any?
+          #errorExplanation.ui.negative.message
+            %h3.ui.header
+              = pluralize(gift_card.errors.size, "error")
+              prohibited this record from being saved.
+            %p There were problems with the following fields:
+            %ul
+              - gift_card.errors.full_messages.each do |msg|
+                %li= msg
+        = form.hidden_field :person_id, value: @person.id
+        = form.hidden_field :reason, value: "unknown"
+        .six.fields
+          .field{id: "new-batchid-#{@person.id}"}
+            .ui.mini.input
+              = form.text_field :batch_id, placeholder: "Batch ID"
+          .field{id: "new-proxyid-#{@person.id}"}
+            .ui.mini.input
+              = form.text_field :proxy_id, placeholder: "Proxy ID"
+          .field{id: "new-cardnumber-#{@person.id}"}
+            .ui.mini.input
+              = form.text_field :gift_card_number, placeholder: 'Card Number'
+          .field{id: "new-expirationdate-#{@person.id}"}
+            .ui.mini.input
+              = form.text_field :expiration_date, placeholder: "MM/YY"
+          .field
+            .ui.mini.input
+              = form.text_field :amount, value: nil, placeholder: 'Amount'
+          .field
+            = form.submit 'Add Gift Card', class: "ui mini fluid green button"
+      %table.ui.sortable.striped.table
+        %thead
+          %tr
+            %th Reason
+            %th Giftable ID
+            %th Batch
+            %th Card Number
+            %th Expiration Date
+            %th Amount
+            %th Created On
+            %th.center.aligned Actions
+        %tbody#people_gift_cards
+          = render partial: 'admin/people/gift_card', collection: @person.gift_cards.order("created_at DESC")
+  - if @person.answers.any?
+    .equal.width.row
+      .column
+        %h3.ui.header Answers
+        %table.ui.striped.sortable.table
+          %thead
+            %tr
+              %th Question
+              %th Answer
+              %th Answered on
+              %th Last updated
+          %tbody#answers
+            = render partial: 'admin/answers/answer', collection: @person.answers
+:javascript
+  var checkbox = document.getElementById('contact-check')
+  var contactType = document.getElementById('contact-type-hidden')
+  checkbox.addEventListener('change', function(){
+    if(this.checked){
+      contactType.setAttribute('id','contact-type')
+    } else {
+      contactType.setAttribute('id','contact-type-hidden')
+    }
+  })

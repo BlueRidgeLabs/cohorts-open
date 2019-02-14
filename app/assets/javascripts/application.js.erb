@@ -1,0 +1,26 @@
+//= require jquery
+//= requre_self
+
+$(document).ready(function () {
+  // Map image
+  var $hero = $(".hero"),
+      $heroBg = $hero.find('.hero-background'),
+      customImg = $hero.data("image"),
+      staticMap = "https://maps.googleapis.com/maps/api/staticmap?zoom=8&size=640x480&key=<%= ENV['GOOGLE_API_KEY'] %>&center=";
+
+  if(customImg) {
+    $heroBg.css("background-image", "url(" + customImg + ")");
+  } else {
+    $.getJSON("https://freegeoip.net/json/", function (data) {
+      var mapImg = staticMap + data.latitude + "," + data.longitude;
+      $heroBg.css("background-image", "url(" + mapImg + ")");
+    });
+  }
+
+  // Scroll
+  $("a[href='#signup']").click(function (e) {
+    e.preventDefault();
+    var target = $("#signup").offset().top;
+    $("html, body").animate({ scrollTop: target });
+  });
+});

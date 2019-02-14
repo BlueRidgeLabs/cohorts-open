@@ -1,0 +1,10 @@
+%tr{id: "answer-#{answer.id}"}
+  %td= answer.question.text
+  %td.answer-value-cell
+    %span.answer-value{'data-edit-action': admin_answer_path(answer),
+    'data-value-content': answer.value,
+    'data-edit-form-html': (render partial: 'admin/answers/edit_form', locals: { answer: answer })}= answer.value
+    &nbsp;
+    %i.grey.pencil.icon
+  %td= answer.created_at.strftime('%b %e, %Y at %l:%M %p')
+  %td= answer.updated_at.strftime('%b %e, %Y at %l:%M %p')

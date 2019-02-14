@@ -1,0 +1,37 @@
+.flex-wrapper
+  .ui.comments#inbox-message-container
+    - @messages.each do |message|
+      .comment
+        .content
+          %a.author
+            - if message.to == message.person.email_address || message.to == message.person.phone_number
+              = "You"
+            - else
+              = link_to message.person.full_name, admin_person_path(message.person)
+          .metadata
+            .date= message.time_sent.strftime('%b %e, %Y at %l:%M %p')
+            .format
+              - if message.is_a?(EmailMessage)
+                %i.mail.icon
+                = message.subject
+              - elsif message.is_a?(TwilioMessage)
+                %i.phone.icon
+                = message.from
+          .text
+            .ui.message= message.body.html_safe
+  .bottom
+    .ui.fluid.input#reply-form
+      %select.ui.compact.selection.dropdown#send-method
+        %option{value: 'Email', selected: ('' if @messages.last.is_a?(EmailMessage))} Email
+        %option{value: 'SMS', selected: ('' if @messages.last.is_a?(TwilioMessage))} SMS
+      = form_for EmailMessage.new, url: admin_email_messages_path, method: :post, remote: true, html: { class: 'ui form', id: 'email-reply-form', style: ('display: none;' if @messages.last.is_a?(TwilioMessage)) } do |f|
+        = hidden_field_tag 'to[]', [@messages.first.person.email_address]
+        = f.hidden_field :subject, value: @messages.select{ |m| m.is_a?(EmailMessage) }.last&.subject
+        .ui.fluid.action.input
+          = f.text_field :body, placeholder: "Message #{@messages.first.person.full_name}"
+          .ui.submit.button{type: 'submit'} Send
+      = form_for TwilioMessage.new, url: admin_twilio_messages_path, method: :post, remote: true, html: { class: 'ui form', id: 'sms-reply-form', style: ('display: none;' if @messages.last.is_a?(EmailMessage)) } do |f|
+        = hidden_field_tag 'to[]', [@messages.first.person.phone_number]
+        .ui.fluid.action.input
+          = f.text_field :body, placeholder: "Message #{@messages.first.person.full_name}"
+          .ui.submit.button{type: 'submit'} Send

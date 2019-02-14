@@ -1,0 +1,36 @@
+.ui.clearing.vertical.segment
+  .ui.right.floated.header
+    = link_to new_admin_static_page_path, class: "ui tiny green button" do
+      %i.add.icon
+      New Static Page
+  %h1.ui.left.floated.header
+    Static Pages
+    .sub.header
+      = page_entries_info @static_pages
+
+- if @static_pages.any?
+  %table.ui.sortable.striped.table
+    %thead
+      %tr
+        %th Title
+        %th Slug
+        %th.center.aligned Actions
+
+    %tbody#static_page-table
+      - @static_pages.each do |static_page|
+        %tr{ id: "static_page-#{static_page.id}" }
+          %td= static_page.title
+          %td= raw static_page.slugs.collect { |slug| slug.slug }.join("<br/>")
+          %td.center.aligned.collapsing
+            .ui.icon.basic.buttons
+              = link_to static_page_path(static_page.slug), class: "ui icon button", target: "_blank" do
+                %i.linkify.icon
+              = link_to edit_admin_static_page_path(static_page), class: "ui icon button" do
+                %i.edit.icon
+              = link_to admin_static_page_path(static_page), class: "ui icon button", data: {method: :delete, confirm: 'Remove this static page?'} do
+                %i.delete.icon
+
+  = paginate @static_pages
+
+- else
+  %p No static pages exist.

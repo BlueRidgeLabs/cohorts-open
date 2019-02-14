@@ -1,0 +1,27 @@
+- case answer.question.datatype
+- when 'radio', 'select'
+  .field
+    .ui.action.input
+      = select_tag 'answer[value]', options_for_select(answer.question.choices), class: 'ui selection dropdown'
+      .ui.green.submit.button
+        %i.edit.icon
+        Update
+- when 'checkbox'
+  .grouped.fields
+    = hidden_field_tag 'answer[value]', answer.value
+    - answer.question.choices.each do |choice|
+      .field
+        .ui.checkbox
+          = check_box_tag 'checkboxes[]', choice, answer.value.split(', ').include?(choice)
+          = label_tag choice
+    .field
+      .ui.green.submit.button
+        %i.edit.icon
+        Update
+- else
+  .field
+    .ui.action.input
+      %input#value_content{name: 'answer[value]'}
+      .ui.green.submit.button
+        %i.edit.icon
+        Update

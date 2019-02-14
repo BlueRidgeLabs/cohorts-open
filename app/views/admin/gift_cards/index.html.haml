@@ -1,0 +1,42 @@
+.ui.clearing.vertical.segment
+  .ui.right.floated.header
+    = link_to admin_gift_cards_path(params.merge(format: 'csv')), class: "ui tiny button" do
+      %i.icon.download
+      Download CSV
+    = link_to new_admin_gift_card_path, class: "ui tiny green button" do
+      %i.icon.add
+      New Gift Card
+  %h1.ui.left.floated.header
+    Gift Cards
+    .sub.header
+      = page_entries_info @gift_cards, entry_name: 'gift cards'
+
+- if @recent_signups.any?
+  .ui.icon.warning.message
+    %i.icon.warning.sign
+    .content
+      .header
+        Recent sign-ups
+      %p
+        There are currently
+        = link_to "#{pluralize(@recent_signups.count, 'member')} who need gift cards.", needed_admin_gift_cards_path
+
+%table.ui.sortable.striped.table
+  %thead
+    %tr
+      %th ID
+      %th Name
+      %th Reason
+      %th Giftable ID
+      %th Batch
+      %th Proxy ID
+      %th Card Number
+      %th Expiration Date
+      %th Amount
+      %th Created On
+      %th.center.aligned Actions
+  %tbody#gift_cards
+    - @gift_cards.each do |gift_card|
+      = render partial: 'gift_card', locals: { gift_card: gift_card }
+
+= paginate @gift_cards

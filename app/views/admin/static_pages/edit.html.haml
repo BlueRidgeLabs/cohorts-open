@@ -1,0 +1,5 @@
+%h1.ui.header.page-header Edit Static Page
+
+= form_for @static_page, url: admin_static_page_path(@static_page), html: {class: 'ui form'} do |f|
+  = render 'form_fields', f: f
+  %button.ui.green.button Edit Static Page

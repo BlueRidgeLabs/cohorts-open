@@ -1,0 +1,58 @@
+.ui.clearing.vertical.segment
+  %h1.ui.left.floated.header
+    Gift Cards Needed
+    .sub.header
+      = page_entries_info @recent_signups, entry_name: ''
+
+- @new_gift_cards.each_with_index do |gift_card, index|
+  .ui.padded.raised.segment{ id: "person-#{@recent_signups[index].id}"}
+    .ui.grid
+      .row
+        .six.wide.column
+          .ui.large.list
+            .item
+              %i.user.icon
+              .strong.content= link_to private_information(@recent_signups[index], name: true), admin_person_path(@recent_signups[index]), class: 'green'
+            .item
+              %i.marker.icon
+              .content{ class: session[:privacy_mode] ? 'private-information' : '' }
+                = private_information address_fields_to_sentence(@recent_signups[index])
+            .item
+              %i.comments.icon
+              .content= @recent_signups[index].verified || 'Not verified'
+        .ten.wide.column
+          = form_for [@recent_signups[index], gift_card], url: admin_person_gift_cards_path(@recent_signups[index]), remote: true, html: { class: 'ui form' } do |form|
+            = form.hidden_field :person_id, value: @recent_signups[index].id
+            = form.hidden_field :reason, value: "signup"
+            .three.fields
+              .field{id: "new-batchid-#{@recent_signups[index].id}"}
+                .ui.mini.input
+                  = form.text_field :batch_id, placeholder: "Batch ID"
+              .field{id: "new-proxyid-#{@recent_signups[index].id}"}
+                .ui.mini.input
+                  = form.text_field :proxy_id, placeholder: "Proxy ID"
+              .field{id: "new-cardnumber-#{@recent_signups[index].id}"}
+                .ui.mini.input
+                  = form.text_field :gift_card_number, placeholder: '****-****-***'
+            .three.fields
+              .field{id: "new-expirationdate-#{@recent_signups[index].id}"}
+                .ui.mini.input
+                  = form.text_field :expiration_date, placeholder: "MM/YY"
+              .field
+                .ui.mini.left.icon.input
+                  %i.dollar.icon
+                  = form.text_field :amount, value: "5.00", readonly: true
+              .field
+                = form.submit 'Add Gift Card', class: "ui mini fluid green button"
+      - @recent_signups[index].possible_duplicates.each do |key, val|
+        .row
+          .column
+            .ui.message
+              Possible Duplicate ID
+              = link_to "#{key} #{val['person'].initials}", admin_person_path(val['person'])
+              Matching on
+              = val['match_count']
+              variables:
+              = val['matches_on'].to_sentence
+
+= paginate @recent_signups

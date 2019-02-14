@@ -1,0 +1,13 @@
+.ui.card
+  .content
+    .header= session_checklist.checklist.name
+  .content
+    = form_for session_checklist, url: admin_session_checklist_path(session_checklist), method: :patch, html: { class: 'ui form' } do
+      - session_checklist.checklist.items.each do |item|
+        .field
+          .ui.checkbox
+            = hidden_field_tag "session_checklist[state][#{item}]", 'false'
+            = check_box_tag "session_checklist[state][#{item}]", 'true', true?(session_checklist.state[item])
+            = label_tag item
+  .extra.content
+    .ui.submit.button Save

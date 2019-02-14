@@ -1,0 +1,41 @@
+.ui.clearing.vertical.segment
+  %h1.ui.left.floated.header
+    Answers to
+    = surround '"' do
+      = @question.text
+    = surround '(', ')' do
+      = @question.datatype
+    - if @choices.present?
+      .sub.header
+        = page_entries_info @choices, entry_name: 'choice'
+    - else
+      .sub.header
+        = page_entries_info @answers, entry_name: 'answers'
+
+.ui.vertical.segment
+  %table.ui.sortable.striped.table
+    %thead
+      %tr
+        %th Value
+        %th Members
+        - if @choices.present?
+          %th Count
+
+    %tbody
+    - if @choices.present?
+      - @choices.each do |choice|
+        %tr
+          - choosers = @answers.select { |a| a.value == choice || a.value.split(', ').include?(choice) }.map(&:person)
+          %td= choice
+          %td= raw choosers.collect { |person| link_to person.full_name, admin_person_path(person) }.join(', ')
+          %td= choosers.count
+    - else
+      - @answers.each do |answer|
+        %tr
+          %td= answer.value
+          %td= link_to answer.person.full_name, admin_person_path(answer.person)
+
+- if @choices.present?
+  = paginate @choices
+- else
+  = paginate @answers

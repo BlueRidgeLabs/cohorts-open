@@ -1,0 +1,8 @@
+.ui.clearing.vertical.segment
+  %h1.ui.left.floated.header
+    Edit Tag
+
+.ui.vertical.segment
+  = form_for @tag, url: admin_tag_path(@tag), html: {class: 'ui form'} do |f|
+    = render 'form_fields', f: f
+    %button.ui.green.button Edit Tag

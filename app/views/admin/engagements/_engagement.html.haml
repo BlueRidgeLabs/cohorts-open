@@ -1,0 +1,7 @@
+%tr
+  %td= link_to engagement.topic, admin_engagement_path(engagement)
+  - unless local_assigns.fetch(:hide_client, false)
+    %td= link_to engagement.client.name, admin_client_path(engagement.client)
+  %td= engagement.start_date&.strftime('%m/%d/%Y')
+  %td= engagement.end_date&.strftime('%m/%d/%Y')
+  %td= engagement.research_sessions.count

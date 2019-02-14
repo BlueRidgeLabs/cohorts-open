@@ -1,0 +1,8 @@
+#notifications
+  - if flash[:notice] || flash[:alert] || flash[:error] || flash[:success]
+    %div{class: "ui message #{flash[:notice].present? || flash[:success].present? ? "positive" : "negative"}"}
+      %i.close.icon
+      = flash[:alert]
+      = flash[:notice]
+      = flash[:error]
+      = flash[:success]

@@ -1,0 +1,24 @@
+.ui.clearing.vertical.segment
+  .ui.right.floated.header
+    = link_to new_admin_trait_path, class: "ui tiny green button" do
+      %i.add.icon
+      New Trait
+  %h1.ui.left.floated.header
+    Traits
+    .sub.header
+      = page_entries_info @traits
+
+.ui.vertical.segment
+  %table.ui.sortable.striped.table.very.padded
+    %thead
+      %tr
+        %th Name
+        %th Count
+
+    %tbody
+    - @traits.each do |trait|
+      %tr
+        %td= link_to trait.name, edit_admin_trait_path(trait)
+        %td= trait.trait_count
+
+= paginate @traits

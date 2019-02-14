@@ -1,0 +1,19 @@
+.ui.clearing.vertical.segment
+  .ui.right.floated.header
+    = link_to new_admin_tagging_path, class: "ui tiny green button" do
+      %i.add.icon
+      New Tag
+  %h1.ui.left.floated.header
+    Tags
+
+%table.ui.sortable.striped.table
+  %thead
+    %tr
+      %th Name
+      %th Count
+
+  %tbody
+    - @taggings.each do |tagging|
+      %tr
+        %td= link_to tagging.tag.name, admin_tagging_path(tagging)
+        %td= tagging.tag.taggings_count

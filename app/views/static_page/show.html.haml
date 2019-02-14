@@ -1,0 +1,15 @@
+= content_for(:page_title) { @static_page.title }
+= content_for(:facebook_meta) do
+  %meta{ property: 'og:url', content: static_page_url(@static_page) }
+  %meta{ property: 'og:title', content: @static_page.title }
+  %meta{ property: 'og:description', content: @static_page.link_description }
+  %meta{ property: 'og:image', content: image_url('banner.png') }
+
+- if @static_page.pixel_code
+  = content_for(:facebook_pixel) do
+    = @static_page.pixel_code.html_safe
+
+.main
+  .container
+    .row
+      = @static_page.body.html_safe

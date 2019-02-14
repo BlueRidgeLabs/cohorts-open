@@ -1,0 +1,12 @@
+.ui.clearing.vertical.segment
+  .ui.right.floated.header
+    = link_to admin_saved_search_path(@saved_search), class: "ui tiny red button", data: {method: :delete, confirm: 'Are you sure? This will remove the saved search and all of its associated data.'} do
+      %i.warning.sign.icon
+      Delete Saved Search
+  %h1.ui.left.floated.header
+    Edit Saved Search
+
+.ui.vertical.segment
+  = form_for @saved_search, url: admin_saved_search_path(@saved_search), html: {class: 'ui form'} do |f|
+    = render 'form_fields', f: f
+    %button.ui.green.button Edit Saved Search

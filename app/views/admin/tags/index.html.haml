@@ -1,0 +1,24 @@
+.ui.clearing.vertical.segment
+  .ui.right.floated.header
+    = link_to new_admin_tag_path, class: "ui tiny green button" do
+      %i.add.icon
+      New Tag
+  %h1.ui.left.floated.header
+    Tags
+    .sub.header
+      = page_entries_info @tags
+
+.ui.vertical.segment
+  %table.ui.sortable.striped.table.very.padded
+    %thead
+      %tr
+        %th Name
+        %th Count
+
+    %tbody
+    - @tags.each do |tag|
+      %tr
+        %td= link_to tag.name, edit_admin_tag_path(tag)
+        %td= tag.tag_count
+
+= paginate @tags

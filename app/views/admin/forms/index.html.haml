@@ -1,0 +1,39 @@
+.ui.clearing.vertical.segment
+  .ui.right.floated.icon.buttons
+    = link_to 'https://adhocteamus.wufoo.com/build/', class: 'ui tooltippy left attached icon button', title: 'New Wufoo Form' do
+      %i.add.icon
+    = link_to update_from_wufoo_admin_forms_path, class: 'ui tooltippy attached icon button', title: 'Pull updates from Wufoo' do
+      %i.download.icon
+    = link_to hidden_admin_forms_path, class: 'ui tooltippy right attached icon button', title: 'View hidden forms' do
+      %i.hide.icon
+  %h1.ui.left.floated.header
+    Wufoo Forms
+    .sub.header
+      = page_entries_info @forms
+
+%table.ui.sortable.striped.table
+  %thead
+    %tr
+      %th Name
+      %th Description
+      %th Landing Pages
+      %th Created
+      %th Last update
+      %th.center.aligned Actions
+
+  %tbody
+    - @forms.each do |form|
+      %tr{ id: "form-#{form.id}"}
+        %td= link_to form.name, "https://adhocteamus.wufoo.com/forms/#{form.url}"
+        %td= form.description
+        %td= LandingPage.where(form: form).map { |lp| link_to(lp.tag.name, landing_page_path(lp.tag.name)) }.join(', ').html_safe
+        %td= form.created_on.strftime('%b %e, %Y at %l:%M %p')
+        %td= form.last_update.strftime('%b %e, %Y at %l:%M %p')
+        %td.center.aligned
+          .ui.icon.buttons
+            = link_to edit_admin_form_path(form), class: 'ui tooltippy left attached icon button', title: 'Cohorts Settings' do
+              %i.settings.icon
+            = link_to "https://adhocteamus.wufoo.com/build/#{form.url}", class: 'ui tooltippy right attached icon button', title: 'Edit in Wufoo' do
+              %i.edit.icon
+
+= paginate @forms

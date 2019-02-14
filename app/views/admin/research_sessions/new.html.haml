@@ -1,0 +1,9 @@
+.ui.vertical.segment
+  %h2.ui.header
+    .sub.header= "#{@engagement.client.name}: #{@engagement.topic}"
+    New Session
+
+.ui.vertical.segment
+  = form_for @research_session, url: admin_engagement_research_sessions_path(@engagement), html: {class: 'ui form'} do |f|
+    = render 'form_fields', f: f
+    %button.ui.green.button Create Session

@@ -1,0 +1,12 @@
+.comment{ id: "contact-#{contact.id}" }
+  .notes
+    %a.author
+      - if contact.created_by
+        = "#{User.find(contact.created_by).email} via #{contact.contact_type}"
+    .metadata
+      .date
+        = link_to "#{contact.contact_time.to_s(:short_ordinal)}", admin_person_path(contact.contactable, anchor: "contact-#{contact.id}"), title: contact.updated_at.to_s(:long), class: 'green'
+      - if contact.created_by && User.find(contact.created_by) == current_admin_user
+        %i.pencil.icon
+    .text{ id: "contact-#{contact.id}-notes", 'data-edit-action': admin_person_contact_path(contact.contactable, contact), 'data-contact-notes': contact.notes }
+      = contact.notes

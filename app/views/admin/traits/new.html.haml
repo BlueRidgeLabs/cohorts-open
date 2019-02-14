@@ -1,0 +1,8 @@
+.ui.clearing.vertical.segment
+  %h1.ui.left.floated.header
+    New Trait
+
+.ui.vertical.segment
+  = form_for :trait, url: admin_traits_path, html: {class: 'ui form'} do |f|
+    = render 'form_fields', f: f
+    %button.ui.green.button Create Trait

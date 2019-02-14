@@ -1,0 +1,40 @@
+!!!
+%html{lang: "en"}
+  %head
+    %title
+      Cohorts
+      = "| #{yield(:page_title)}" if content_for?(:page_title)
+    = stylesheet_link_tag "application", media: "all"
+    = render 'application/favicon'
+    %meta{charset: "utf-8"}/
+    %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}/
+    %meta{content: "True", name: "HandheldFriendly"}/
+    %meta{content: "320", name: "MobileOptimized"}/
+    %meta{content: "website", property: "og:type"}/
+    %meta{content: "", name: "description"}/
+    %meta{content: "en_US", property: "og:locale"}/
+    %meta{content: "PyHWsb8GRL1X4iiD26-_9Q227OrnxIGh0bV8qUeKw9g", name: "google-site-verification"}
+    = yield(:facebook_meta) if content_for?(:facebook_meta)
+    = yield(:facebook_pixel) if content_for?(:facebook_pixel)
+    = render "shared/typekit"
+    = csrf_meta_tags
+  %body{data: {controller: controller.controller_path, action: controller.action_name}}
+    %header
+      .row
+        %span.logo{role: "banner"}
+          Cohorts
+      = yield
+    %footer
+      .container
+        .row
+          .column
+            an
+            = link_to "Ad Hoc", "https://adhocteam.us/"
+            product
+          .right.aligned.column
+            = link_to 'Privacy Policy', 'https://www.cohortsfeedback.com/page/privacy-policy'
+            &nbsp;
+            = link_to 'Terms of Use', 'https://www.cohortsfeedback.com/page/terms-of-use'
+    = render "shared/google_analytics"
+    = render "shared/facebook_pixel"
+    = javascript_include_tag "application"

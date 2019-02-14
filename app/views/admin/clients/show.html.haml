@@ -1,0 +1,30 @@
+.ui.vertical.segment
+  .ui.grid
+    .equal.width.row
+      .column
+        %h2.ui.header= @client.name
+      .column
+        %h4.ui.header Eligibility criteria
+        .ui.labels
+          - @client.eligibility_criteria.each do |saved_search|
+            .ui.label.tooltippy{ title: saved_search.query }= saved_search.label
+      .right.aligned.column
+        = link_to edit_admin_client_path(@client), class: "ui tiny basic button" do
+          %i.edit.icon
+          Edit Client
+        = link_to new_admin_client_engagement_path(@client), class: "ui tiny green button" do
+          %i.add.icon
+          New Engagement
+- if @client.engagements.any?
+  .ui.vertical.segment
+    %table.ui.sortable.striped.table
+      %thead
+        %tr
+          %th Engagement Topic
+          %th Start Date
+          %th End Date
+          %th Sessions
+      %tbody
+        = render @client.engagements, { hide_client: true }
+- else
+  %p No engagements exist.

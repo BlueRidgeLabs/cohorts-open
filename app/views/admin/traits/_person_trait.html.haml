@@ -1,0 +1,9 @@
+.ui.label{ id: "#{person_trait.trait.name}-trait", 'data-trait-id': person_trait.trait.id, 'data-person-id': person_trait.person.id }
+  = succeed ':' do
+    %span.trait-name= person_trait.trait.name
+  %span.trait-value= person_trait.value
+  .detail
+    %a
+      %i.inverted.pencil.link.icon
+    = link_to admin_person_trait_path(person_trait.person, person_trait.trait), method: :delete, remote: true, class: "delete-link", title: "delete this trait" do
+      %i.inverted.delete.link.icon

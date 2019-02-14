@@ -1,0 +1,24 @@
+.ui.clearing.vertical.segment
+  .ui.right.floated.header
+    = link_to new_admin_checklist_path, class: "ui tiny green button" do
+      %i.add.icon
+      New Checklist
+  %h1.ui.left.floated.header
+    Checklists
+    .sub.header
+      = page_entries_info @checklists
+
+.ui.vertical.segment
+  %table.ui.sortable.striped.table.very.padded
+    %thead
+      %tr
+        %th Name
+        %th Count
+
+    %tbody
+    - @checklists.each do |checklist|
+      %tr
+        %td= link_to checklist.name, edit_admin_checklist_path(checklist)
+        %td= checklist.checklist_count
+
+= paginate @checklists

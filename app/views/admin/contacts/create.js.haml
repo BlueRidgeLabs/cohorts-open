@@ -1,0 +1,6 @@
+$("#{j render partial: 'admin/people/contact', locals: { contact: @contact }}").prependTo("#contacts");
+$("#comment_content").val("");
+$("#contact-type").attr("id","contact-type-hidden")
+$("#comment_commentable_type").parent().find('.icon').trigger('click')
+$("#contact-check").attr('checked',false);
+$("#contact-error").remove();

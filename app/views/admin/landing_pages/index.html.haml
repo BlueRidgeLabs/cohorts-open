@@ -1,0 +1,43 @@
+.ui.clearing.vertical.segment
+  .ui.right.floated.header
+    = link_to new_admin_landing_page_path, class: "ui tiny green button" do
+      %i.add.icon
+      New Landing Page
+  %h1.ui.left.floated.header
+    Landing Pages
+    .sub.header
+      = page_entries_info @landing_pages
+
+- if @landing_pages.any?
+  %table.ui.sortable.striped.table
+    %thead
+      %tr
+        %th Tag Name
+        %th Lede
+        %th Image
+        %th Simple Format
+        %th Wufoo Form
+        %th.center.aligned Actions
+
+    %tbody#landing_page-table
+      - @landing_pages.each do |landing_page|
+        %tr{ id: "landing_page-#{landing_page.id}" }
+          %td= landing_page.tag.name
+          %td= landing_page.lede
+          %td.table-image.center.aligned= image_tag landing_page.image.url(:thumb) if landing_page.image.present?
+          %td.center.aligned
+            - if landing_page.simple_format?
+              %i.icon.green.checkmark
+          %td= link_to landing_page.form.name, "https://adhocteamus.wufoo.com/forms/#{landing_page.form.url}"
+          %td.center.aligned
+            .ui.icon.basic.buttons
+              = link_to landing_page_path(landing_page.tag.name), class: "ui icon button", target: "_blank" do
+                %i.linkify.icon
+              = link_to edit_admin_landing_page_path(landing_page), class: "ui icon button" do
+                %i.edit.icon
+              = link_to admin_landing_page_path(landing_page), class: "ui icon button", data: {method: :delete, confirm: 'Remove this landing page?'} do
+                %i.delete.icon
+
+  = paginate @landing_pages
+- else
+  %p No landing pages exist.

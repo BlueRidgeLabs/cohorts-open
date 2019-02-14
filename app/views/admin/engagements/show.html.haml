@@ -1,0 +1,80 @@
+.ui.vertical.segment
+  .ui.grid
+    .equal.width.row
+      .column
+        %h2.ui.left.floated.header
+          .sub.header= @engagement.client.name
+          = @engagement.topic
+      .column
+        %h4.ui.header Client eligibility criteria
+        .ui.labels
+          - @engagement.client.eligibility_criteria.each do |saved_search|
+            .ui.label.tooltippy{ title: saved_search.query }= saved_search.label
+      .column
+        %h4.ui.header Engagement eligibility criteria
+        .ui.labels
+          - @engagement.eligibility_criteria.each do |saved_search|
+            .ui.label.tooltippy{ title: saved_search.query }= saved_search.label
+      .right.aligned.column
+        .ui.icon.buttons
+          = link_to "#", class: "ui tooltippy left attached button", id: "filter-button", title: 'Filter eligible members' do
+            %i.filter.icon
+          = link_to edit_admin_engagement_path(@engagement), class: "ui tooltippy attached button", title: 'Edit Engagement' do
+            %i.edit.icon
+          = link_to new_admin_engagement_research_session_path(@engagement), class: "ui tooltippy right attached button", title: 'New Session' do
+            %i.add.icon
+
+.ui.clearing.vertical.secondary.padded.segment#filter-section
+  %h3.ui.header
+    Eligible members
+    = surround '(', ')' do
+      = @eligible_members.count
+  = form_tag admin_engagement_path(@engagement), method: 'get' do
+    .ui.fluid.icon.input
+      = search_field_tag :filter, params[:filter], placeholder: "Filter eligible members..."
+      %i.search.link.icon
+  %table.ui.sortable.striped.table
+    %thead
+      %tr
+        %th Name
+        %th Email
+        %th Phone
+        %th Submissions
+        %th Signed up
+        %th Signup form
+        %th Most recent note
+
+    %tbody
+      = render partial: 'admin/people/person', collection: @eligible_members
+  .right.floated.ui.button.modal-show#message-engagement-members
+    %i.mail.icon
+    Message eligible members
+  .ui.modal#message-engagement-members
+    .header Message eligible members
+    .content
+      = form_for EmailMessage.new, url: admin_email_messages_path, method: :post, html: { class: 'ui form' } do |f|
+        .field
+          = label_tag :to
+          = select_tag :to, options_for_select(@eligible_members.map(&:email_address), @eligible_members.map(&:email_address)), class: 'ui dropdown', multiple: true
+        .field
+          = f.label :subject
+          = f.text_field :subject
+        .field
+          = f.label :body
+          = f.trix_editor :body
+    .actions
+      .ui.positive.submit.button Send
+      .ui.deny.button Cancel
+
+.ui.vertical.segment
+  - if @engagement.research_sessions.any?
+    .ui.vertical.segment
+      %table.ui.sortable.striped.table
+        %thead
+          %tr
+            %th Sessions
+            %th Members
+        %tbody
+          = render @engagement.research_sessions.order(:datetime)
+  - else
+    %p No sessions exist.

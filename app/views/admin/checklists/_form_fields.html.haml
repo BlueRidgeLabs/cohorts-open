@@ -1,0 +1,6 @@
+.field
+  = f.label :name
+  = f.text_field :name
+.field
+  = f.label :items
+  = f.text_field :items, value: f.object.items.present? ? f.object.items.join(', ') : ''

@@ -1,0 +1,7 @@
+- readonly ||= false
+.ui.label{ id: "tagging-#{tagging.id}" }
+  = link_to search_admin_people_path(q: "tag:\"#{tagging.tag.name}\""), class: 'tag-name detail' do
+    = tagging.tag.name
+  - unless readonly
+    = link_to admin_tagging_path(tagging), method: :delete, remote: true, class: "delete-link", title: "delete this tag" do
+      %i.delete.link.icon

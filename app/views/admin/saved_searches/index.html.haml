@@ -1,0 +1,20 @@
+.ui.clearing.vertical.segment
+  %h1.ui.left.floated.header
+    Saved Searches
+    .sub.header
+      = page_entries_info @saved_searches
+
+.ui.vertical.segment
+  %table.ui.sortable.striped.table.very.padded
+    %thead
+      %tr
+        %th Label
+        %th Search query
+
+    %tbody
+    - @saved_searches.each do |saved_search|
+      %tr
+        %td= link_to saved_search.label, edit_admin_saved_search_path(saved_search)
+        %td= saved_search.query
+
+= paginate @saved_searches

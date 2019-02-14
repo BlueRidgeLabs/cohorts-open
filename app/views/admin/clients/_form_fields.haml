@@ -1,0 +1,9 @@
+.field
+  = f.label :name
+  = f.text_field :name
+.field
+  = f.label :saved_search_ids, 'Eligibility criteria'
+  = f.select :saved_search_ids, SavedSearch.all.collect { |ss| [ ss.label, ss.id ] }, {include_hidden: false}, multiple: true, class: 'ui search selection dropdown'
+.field
+  = f.label :checklist_ids, 'Checklists'
+  = f.select :checklist_ids, Checklist.all.collect { |c| [ c.name, c.id ] }, {include_hidden: false}, multiple: true, class: 'ui search selection dropdown'

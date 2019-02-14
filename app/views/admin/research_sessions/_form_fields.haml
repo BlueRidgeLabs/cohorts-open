@@ -1,0 +1,19 @@
+= f.hidden_field :engagement_id, value: params[:engagement_id]
+.two.fields
+  .field
+    = label_tag :date
+    .ui.calendar
+      .ui.left.icon.input
+        %i.calendar.icon
+        = text_field_tag 'research_session[date]', (f.object.datetime.strftime('%B %e, %Y') if f.object.datetime)
+  .field
+    = label_tag :time
+    .clockpicker.ui.left.icon.input
+      %i.clock.icon
+      = text_field_tag 'research_session[time]', (f.object.datetime.strftime('%I:%M %p') if f.object.datetime)
+.field
+  = f.label :person_ids, 'Members'
+  = f.select :person_ids, Person.all.collect { |p| [ p.full_name, p.id ] }, {include_hidden: false}, multiple: true, class: 'ui search selection dropdown'
+.field
+  = f.label :notes
+  = f.text_area :notes

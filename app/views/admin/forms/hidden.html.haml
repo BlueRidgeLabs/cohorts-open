@@ -1,0 +1,37 @@
+.ui.clearing.vertical.segment
+  .ui.right.floated.icon.buttons
+    = link_to 'https://adhocteamus.wufoo.com/build/', class: 'ui tooltippy left attached icon button', title: 'New Wufoo Form' do
+      %i.add.icon
+    = link_to update_from_wufoo_admin_forms_path, class: 'ui tooltippy attached icon button', title: 'Pull updates from Wufoo' do
+      %i.download.icon
+    = link_to admin_forms_path, class: 'ui tooltippy right attached icon button', title: 'View unhidden forms' do
+      %i.unhide.icon
+  %h1.ui.left.floated.header
+    Hidden Wufoo Forms
+    .sub.header
+      = page_entries_info @forms
+
+%table.ui.sortable.striped.table
+  %thead
+    %tr
+      %th Name
+      %th Description
+      %th Created
+      %th Last update
+      %th.center.aligned Actions
+
+  %tbody
+    - @forms.each do |form|
+      %tr{ id: "form-#{form.id}"}
+        %td= link_to form.name, "https://adhocteamus.wufoo.com/forms/#{form.url}"
+        %td= form.description
+        %td= form.created_on.strftime('%b %e, %Y at %l:%M %p')
+        %td= form.last_update.strftime('%b %e, %Y at %l:%M %p')
+        %td.center.aligned.collapsing
+          .ui.icon.buttons
+            = link_to edit_admin_form_path(form), class: 'ui tooltippy left attached icon button', title: 'Cohorts Settings' do
+              %i.settings.icon
+            = link_to "https://adhocteamus.wufoo.com/build/#{form.url}", class: 'ui tooltippy right attached icon button', title: 'Edit in Wufoo' do
+              %i.edit.icon
+
+= paginate @forms

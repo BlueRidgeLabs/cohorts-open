@@ -1,0 +1,35 @@
+= form_for @gift_card, url: admin_gift_cards_path, html: { class: 'ui form' } do |f|
+  - if @gift_card.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@gift_card.errors.count, "error")
+        prohibited this gift_card from being saved:
+      %ul
+        - @gift_card.errors.full_messages.each do |message|
+          %li= message
+  .field
+    = f.label :batch_id, 'Batch ID'
+    = f.text_field :batch_id, placeholder: '4321'
+  .field
+    = f.label :proxy_id, 'Proxy ID'
+    = f.text_field :proxy_id
+  .field
+    = f.label :gift_card_number
+    = f.text_field :gift_card_number, placeholder: "#####", id: "new-cardnumber"
+  .field
+    = f.label :expiration_date
+    = f.text_field :expiration_date
+  .field
+    = f.label :person_id, 'Person ID'
+    = f.number_field :person_id
+  .field
+    = f.label :notes
+    = f.text_field :notes
+  .field
+    = f.label :created_by
+    = f.number_field :created_by
+  .field
+    = f.label :reason
+    = f.select :reason, GiftCard.reasons.keys.to_a, { prompt: "Reason" }, class: 'ui dropdown'
+  .actions
+    = f.submit 'Update', class: 'ui green button'

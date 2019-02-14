@@ -1,0 +1,20 @@
+.ui.three.column.grid
+  .column
+    %h3.ui.header Recent signups
+    = render partial: 'person', collection: @people
+  .column
+    %h3.ui.header Recent unmatched submissions
+    .ui.list
+      = render partial: 'submission', collection: @submissions
+  .column
+    .ui.raised.padded.text.segment
+      %h3.ui.header
+        = pluralize @recent_signups, 'signup'
+        - if @recent_submissions > 0
+          and #{pluralize @recent_submissions, 'form submission'}
+        in the last week.
+      %h4.ui.header Last Week's Deactivation Count:
+      %h3.ui.header= @deactivated
+      %h4.ui.header Most popular tags
+      .ui.green.labels
+        = render partial: 'admin/taggings/tag', collection: Tag.most_popular(10)

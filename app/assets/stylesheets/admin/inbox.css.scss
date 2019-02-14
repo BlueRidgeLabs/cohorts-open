@@ -1,0 +1,58 @@
+.ui.page.segment {
+  height: 100%;
+}
+
+.inbox-segments {
+  height: calc(100% - 2em);
+
+  .horizontal.segments {
+    height: calc(100% - 2.9em);
+  }
+
+  #message-tab-menu {
+    margin-bottom: 1.7em;
+  }
+
+  #message-tab-content {
+    border-left: 0 !important;
+    height: 100%;
+  }
+
+  .ui.tab.active {
+    height: 100%;
+  }
+}
+
+.ui.clearing.segment .ui.left.floated.header {
+  margin-bottom: 0;
+}
+
+.gmail_extra {
+  display: none !important;
+}
+
+.flex-wrapper {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+
+  .ui.comments {
+    margin-bottom: 1em;
+    max-width: none;
+    overflow-y: auto;
+    padding-right: 1em;
+  }
+
+  .bottom {
+    margin-top: auto;
+    margin-bottom: 1.5em;
+
+    trix-editor {
+      min-height: 5em;
+    }
+  }
+}
+
+#reply-form form {
+  flex: 1;
+}

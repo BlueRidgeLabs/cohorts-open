@@ -1,0 +1,97 @@
+!!!
+%html
+  %head
+    %title
+      Cohorts Admin | #{title = yield(:page_title); title.present? ? title : controller_name.humanize.titlecase}
+    = stylesheet_link_tag "admin", media: "all", "data-turbolinks-track" => true
+    = stylesheet_link_tag 'https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin'
+    = javascript_include_tag "admin", "data-turbolinks-track" => true
+    = csrf_meta_tags
+    = render 'application/favicon'
+    %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}/
+    - if Cohorts::Application.config.google_analytics_enabled
+      :javascript
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        var ga_options = {'siteSpeedSampleRate': 100}
+        ga('create', '#{ENV['GOOGLE_ANALYTICS_APP_ID']}',ga_options);
+        ga('send', 'pageview');
+  %body
+    .ui.visible.sidebar.vertical.menu
+      .item
+        .header
+          %i.icon.dashboard
+          Dashboard
+        .menu
+          = link_to "Members", admin_people_path, class: 'item'
+          = link_to 'Clients', admin_clients_path, class: 'item'
+          = link_to 'Engagements', admin_engagements_path, class: 'item'
+          = link_to admin_submissions_path, class: 'item' do
+            Submissions
+            - unmatched_count = Submission.where('person_id is ?', nil).count
+            - if unmatched_count.positive?
+              .ui.tiny.label= unmatched_count
+          = link_to 'Questions', admin_questions_path, class: 'item'
+      .item
+        .header
+          %i.icon.tasks
+          Manage
+        .menu
+          = link_to admin_gift_cards_path, class: 'item' do
+            Gift Cards
+            - recent_signup_count = Person.no_signup_card.count
+            - if recent_signup_count.positive?
+              .ui.tiny.label= recent_signup_count
+          = link_to "Forms", admin_forms_path, class: 'item'
+          = link_to "Tags", admin_tags_path, class: 'item'
+          = link_to "Traits", admin_traits_path, class: 'item'
+          = link_to "Landing Pages", admin_landing_pages_path, class: 'item'
+          = link_to "Static Pages", admin_static_pages_path, class: 'item'
+          = link_to "Saved Searches", admin_saved_searches_path, class: 'item'
+          = link_to "Checklists", admin_checklists_path, class: 'item'
+      .item
+        .header
+          %i.icon.configure
+          Tools
+        .menu
+          = link_to "Add Submission", new_admin_submission_path, class: 'item'
+      .footer
+        - unless Rails.env.production?
+          %p
+            .ui.tiny.basic.green.label= Rails.env.to_s
+        %i.copyright.icon
+        2017
+        = succeed ',' do
+          = link_to 'Ad Hoc', 'https://adhocteam.us/', class: 'green'
+        all rights reserved.
+
+    .ui.top.fixed.menu
+      = link_to admin_root_path, class: 'logo item' do
+        = image_tag 'banner.svg', class: 'ui small image'
+      .search.item
+        = form_tag search_admin_people_path, method: 'get' do
+          .ui.transparent.icon.input
+            = search_field_tag :q, @q, placeholder: "Search members..."
+            %i.search.link.icon
+      .item
+        .ui.green.toggle.checkbox#privacy-mode-toggle{ class: session[:privacy_mode] ? 'checked' : '' }
+          %input{ type: 'checkbox' }
+          %label Privacy Mode
+      .item
+        = link_to admin_inbox_path do
+          - if current_admin_user.unread_messages.zero?
+            %i.circular.inverted.green.comment.icon
+          - else
+            .ui.red.circular.label= current_admin_user.unread_messages
+      .ui.dropdown.item#account-link
+        %img.avatar{ src: current_admin_user.image_url.present? ? current_admin_user.image_url : current_admin_user.gravatar_url }
+        = current_admin_user&.name || current_admin_user&.email
+        %i.dropdown.icon
+        .menu
+          = link_to 'Settings', edit_admin_user_registration_path, class: 'item'
+          = link_to 'Sign out', destroy_admin_user_session_path, method: :delete, class: 'item'
+    .ui.page.basic.segment{ class: current_admin_user ? '' : 'signed-out' }
+      = render "shared/flash"
+      = yield

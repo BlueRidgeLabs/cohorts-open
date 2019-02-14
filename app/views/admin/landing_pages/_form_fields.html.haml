@@ -1,0 +1,33 @@
+.field
+  = f.label :format
+  = f.select :format, options_for_select(LandingPage::FORMAT_TYPES, @landing_page.format), {}, class: 'ui fluid dropdown'
+
+.field
+  = f.fields_for :tag_attributes do |t|
+    = t.label :tag
+    = t.select :name, options_for_select(@unused_tags.map{ |s| [s.name, s.name] }, @landing_page.tag.name), { include_blank: true },
+      class: 'ui fluid search dropdown allow-addition',
+      multiple: false,
+      prompt: 'Tag'
+.field
+  = f.label :form
+  = f.select :form_id, options_for_select(Form.where(hidden: false).map{ |s| [s.name, s.id] }, @landing_page.form_id), { include_blank: true }, class: 'ui fluid search dropdown'
+.field
+  = f.label :image, "Hero Image"
+  - if @landing_page.image.present?
+    %p= image_tag @landing_page.image.url(:thumb)
+  .ui.tiny.basic.button.fake-file-field
+    %i.image.icon
+    %span.button-text
+      - if @landing_page.image.present?
+        Choose a new image
+      - else
+        Choose an image
+  .hidden-file-field
+    = f.file_field :image
+.field
+  = f.label :lede
+  = f.text_field :lede
+.field
+  = f.label :body
+  = f.trix_editor :body

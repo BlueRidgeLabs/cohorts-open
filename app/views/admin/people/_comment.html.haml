@@ -1,0 +1,12 @@
+.comment{ id: "comment-#{comment.id}" }
+  .content
+    %a.author
+      - if comment.created_by
+        = User.find(comment.created_by).email
+    .metadata
+      .date
+        = link_to "#{time_ago_in_words(comment.updated_at)} ago", admin_person_path(comment.commentable, anchor: "comment-#{comment.id}"), title: comment.updated_at.to_s(:long), class: 'green'
+      - if comment.created_by && User.find(comment.created_by) == current_admin_user
+        %i.pencil.icon
+    .text{ id: "comment-#{comment.id}-content", 'data-edit-action': admin_person_comment_path(comment.commentable, comment), 'data-comment-content': comment.content }
+      = comment.content

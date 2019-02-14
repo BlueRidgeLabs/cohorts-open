@@ -1,0 +1,8 @@
+.ui.clearing.vertical.segment
+  %h1.ui.left.floated.header
+    New Checklist
+
+.ui.vertical.segment
+  = form_for Checklist.new, url: admin_checklists_path, html: {class: 'ui form'} do |f|
+    = render 'form_fields', f: f
+    %button.ui.green.button Create Checklist

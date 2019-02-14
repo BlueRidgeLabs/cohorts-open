@@ -1,0 +1,260 @@
+// Static pages
+
+// Variables
+
+$color-primary: #077C66;
+$color-secondary: #31B67B;
+$color-white: #fff;
+$color-content: #444;
+
+$font-family: "proxima-nova", sans-serif;
+
+// Globals
+html {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  position: relative;
+  font-family: $font-family;
+  font-size: 12px;
+  padding: 0;
+  margin: 0;
+  line-height: 1.5em;
+  min-height: 100%;
+  padding-bottom: 3em;
+}
+
+a {
+  color: inherit;
+  font-weight: bold;
+  text-decoration: none;
+  border-bottom: 2px solid #85F5B9;
+  &:hover, &:active {
+    border-bottom: 2px solid $color-secondary;
+  }
+}
+
+// FOUT
+.wf-loading {
+  .hero .row,
+  main .row {
+    visibility: hidden;
+  }
+}
+
+// Headings
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0.5em 0;
+  color: $color-primary;
+  font-weight: 700;
+  line-height: 1.2em;
+}
+
+h2 {
+  font-size: 1.75em;
+}
+
+// Header
+header .logo {
+  display: block;
+  padding: 1.5em 0;
+  width: 16em;
+  height: 6.6em;
+  font: 0;
+  color: transparent;
+  background: image-url('banner.svg') center center no-repeat;
+  background-size: contain;
+}
+
+// Grid
+
+.row {
+  margin: 0 auto;
+  max-width: 50rem;
+  padding: 0 1em;
+}
+
+// Hero
+.hero {
+  position: relative;
+  padding: 2em 0em;
+  overflow: hidden;
+  background: #063346;
+
+
+  .hero-background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;
+    opacity: 0.3;
+    background: center center no-repeat;
+    background-size: cover;
+  }
+
+  .row {
+    position: relative;
+    z-index: 1;
+  }
+
+  h1 {
+    font-size: 3em;
+    font-weight: 800;
+    color: $color-primary;
+
+    span {
+      display: inline;
+      line-height: 1.15em;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+      padding: 0 10px;
+      background: $color-white;
+    }
+  }
+
+  .btn {
+    font-size: 1.125em;
+  }
+}
+
+.container {
+  position: relative;
+}
+
+.main {
+  padding: 2em 0;
+}
+
+// Buttons
+.btn {
+  display: inline-block;
+  padding: .75em 2.5em;
+  margin-bottom: 1em;
+  background:#AD0000;
+  border: none;
+  font-size: 1em;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+
+  &:hover {
+    background: #DE4822;
+  }
+}
+
+// Form
+
+.form {
+  background: $color-primary;
+  padding: 3em 0;
+  color: #fff;
+  margin: 2em 0 0;
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: 47%;
+    bottom: 100%;
+    border: 16px solid;
+    border-color: transparent $color-primary $color-primary transparent;
+  }
+
+
+  &.simple {
+    margin-top: 0;
+
+    h2 {
+      color: #fff;
+    }
+
+    .intro {
+      margin-bottom: 2em;
+
+      > h2 {
+        margin-top: 0;
+      }
+    }
+
+    &:before {
+      display: none;
+    }
+  }
+}
+
+// Footer
+
+footer, {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+
+  .container {
+    padding: .75em;
+
+    .row {
+      display: flex;
+
+      .column {
+        flex: 1;
+
+        &.right.aligned {
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  &, a {
+    color: $color-primary;
+    border-color: $color-primary;
+  }
+}
+
+// Static Pages
+body[data-controller="static_page"] {
+  background: $color-primary;
+
+  header,
+  footer {
+    background: #fff;
+  }
+
+  .main {
+    padding-top: 2em;
+    padding-bottom: 4em;
+    color: white;
+    background: $color-primary;
+  }
+
+  h2 {
+    color: white;
+  }
+
+  .item {
+    margin-bottom: 3em;
+  }
+}
+
+// Reponsive
+@media only screen and (min-width : 768px) {
+  body {
+    font-size: 18px;
+  }
+
+  footer {
+    position: absolute;
+  }
+}

@@ -1,0 +1,25 @@
+/*
+ *= require semantic_ui/semantic_ui
+ *= require_self
+ */
+
+body.sessions {
+  & > .grid {
+    height: 100%;
+  }
+
+  .column {
+    max-width: 40em;
+  }
+
+  .logo {
+    display: inline-block;
+    padding: 1.5em 0;
+    width: 12em;
+    height: 2.7em;
+    font: 0;
+    color: transparent;
+    background: image-url('banner.svg') center center no-repeat;
+    background-size: contain;
+  }
+}

@@ -1,0 +1,30 @@
+-if form_hash(@landing_page&.form) == ENV['WUFOO_DEFAULT_FORM']
+ %div{id: "wufoo-#{form_hash(@landing_page&.form)}" }
+  %iframe{height: "1800",
+         allowTransparency: "true",
+         frameborder: "0", 
+         scrolling: "no",
+         title: "signup form",
+         style: "width:100%;border:none",
+         src: "https://adhocteamus.wufoo.com/embed/#{form_hash(@landing_page&.form)}/def/field28=#{@tag_name}"}
+  %a{href:"https://adhocteamus.wufoo.com/forms/#{form_hash(@landing_page&.form)}/"} Fill out my Wufoo form!
+- elsif ['mhcq91r0uj1z12', 'x1hf8igs0ukwq5y'].include?(form_hash(@landing_page&.form))
+ %div{id: "wufoo-#{form_hash(@landing_page&.form)}" }
+  %iframe{height: "1800",
+         allowTransparency: "true",
+         frameborder: "0", 
+         scrolling: "no",
+         title: "signup form",
+         style: "width:100%;border:none",
+         src: "https://adhocteamus.wufoo.com/embed/#{form_hash(@landing_page&.form)}/def/field1422=#{@tag_name}"}
+  %a{href:"https://adhocteamus.wufoo.com/forms/#{form_hash(@landing_page&.form)}/"} Fill out my Wufoo form!
+- else
+ %div{id: "wufoo-#{form_hash(@landing_page&.form)}" }
+  %iframe{height: "1800",
+         allowTransparency: "true",
+         frameborder: "0", 
+         scrolling: "no",
+         title: "signup form",
+         style: "width:100%;border:none",
+         src: "https://adhocteamus.wufoo.com/embed/#{form_hash(@landing_page&.form)}/"}
+  %a{href:"https://adhocteamus.wufoo.com/forms/#{form_hash(@landing_page&.form)}/"} Fill out my Wufoo form!

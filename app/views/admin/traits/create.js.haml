@@ -1,0 +1,18 @@
+$("#trait-list").append("#{escape_javascript(render partial: 'admin/traits/person_trait', locals: {person_trait: @person_trait })}")
+$("##{@person_trait.trait.name}-trait").hide().transition('scale');
+$("#trait_name").siblings('.text').empty();
+$("#trait_name").parent().dropdown('clear');
+$("#trait_name").parent().find('.icon').removeClass('delete').addClass('dropdown');
+$("#person_trait_value").val('');
+$('##{@person_trait.trait.name}-trait .pencil.icon').click(function() {
+trait_id = $(this).parents('.ui.label').attr('data-trait-id');
+person_id = $(this).parents('.ui.label').attr('data-person-id');
+action = '/admin/people/' + person_id + '/traits/' + trait_id;
+$('#update-person-trait-form').attr('action', action);
+trait_name = $(this).parents('.ui.label').find('.trait-name').text();
+$('#update-person-trait-form .ui.dropdown').dropdown('set selected', trait_name);
+trait_value = $(this).parents('.ui.label').find('.trait-value').text();
+$('#update-person-trait-form #person_trait_value').val(trait_value);
+$(this).parents('.ui.label').transition('scale').remove();
+$('#update-person-trait-form').transition('slide down');
+});

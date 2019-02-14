@@ -1,0 +1,32 @@
+%p#notice= notice
+%h1.ui.header.page-header
+  Showing Gift Card
+  = @gift_card.id
+.ui.huge.list
+  .item
+    .header Gift Card Number
+    = @gift_card.gift_card_number
+  .item
+    .header Expiration date
+    = @gift_card.expiration_date
+  .item
+    .header Member
+    = link_to private_information(@gift_card.person, name: true), admin_person_path(@gift_card.person), class: 'green'
+  .item
+    .header Created by
+    = @gift_card.created_by
+  .item
+    .header Reason
+    = @gift_card.reason
+  .item
+    .header Notes
+    = @gift_card.notes
+= link_to edit_admin_gift_card_path(@gift_card), class: 'ui labeled icon button' do
+  %i.edit.icon
+  Edit
+= link_to admin_gift_cards_path, class: 'ui labeled icon button' do
+  %i.left.arrow.icon
+  Back
+= link_to admin_gift_card_path(@gift_card), method: :delete, data: { confirm: 'Are you sure?' }, class: 'ui labeled red icon button' do
+  Delete
+  %i.delete.icon

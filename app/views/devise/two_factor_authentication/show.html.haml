@@ -1,0 +1,13 @@
+= form_tag([resource_name, :two_factor_authentication], method: :put, class: 'ui form') do 
+  - unless flash.any?   
+    .ui.positive.message 
+      %i.close.icon
+      We sent you a message via SMS with your authentication code. Enter the code to verify your identity.
+  .field
+    = label_tag "Authentication code"
+    = text_field_tag :code
+  .field
+    = submit_tag "Verify code", class: "ui green button"
+
+  = link_to "Sign out and try again", destroy_admin_user_session_path, method: :delete
+  

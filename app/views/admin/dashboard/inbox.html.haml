@@ -1,0 +1,46 @@
+.ui.segments.inbox-segments
+  .ui.clearing.segment
+    %h2.ui.left.floated.header Inbox
+    .right.floated.ui.green.button.modal-show#inbox-new-sms
+      %i.phone.icon
+      New SMS
+    .ui.modal#inbox-new-sms
+      .header New SMS Message
+      .content
+        = form_for TwilioMessage.new, url: admin_twilio_messages_path, method: :post, html: { class: 'ui form', id: 'sms-form' } do |f|
+          .field
+            = label_tag :to
+            = select_tag :to, options_for_select(Person.with_phone.map { |p| ["#{p.full_name} (#{p.phone_number})", p.phone_number] }), class: 'ui search selection dropdown', id: 'sms-to-field', multiple: true
+          .field
+            = f.label :body
+            = f.text_area :body, id: 'sms-body-field'
+      .actions
+        .ui.positive.submit.button Send
+        .ui.deny.button Cancel
+    .right.floated.ui.green.button.modal-show#inbox-new-email
+      %i.mail.icon
+      New Email
+    .ui.modal#inbox-new-email
+      .header New Email Message
+      .content
+        = form_for EmailMessage.new, url: admin_email_messages_path, method: :post, html: { class: 'ui form', id: 'email-form' } do |f|
+          .field
+            = label_tag :to
+            = select_tag :to, options_for_select(Person.with_email.map { |p| ["#{p.full_name} (#{p.email_address})", p.email_address] }), class: 'ui search selection dropdown', id: 'email-to-field', multiple: true
+          .field
+            = f.label :subject
+            = f.text_field :subject, id: 'email-subject-field'
+          .field
+            = f.label :body
+            = f.trix_editor :body, id: 'email-body-field'
+      .actions
+        .ui.positive.submit.button Send
+        .ui.deny.button Cancel
+  .ui.horizontal.segments
+    .ui.vertical.secondary.pointing.menu#message-tab-menu
+      - @people.each_with_index do |person, i|
+        .item{'data-tab': person.id, class: ('active' if i.zero?) }
+          = person.full_name
+    .ui.vertical.padded.segment#message-tab-content
+      - @people.each do |person|
+        .ui.tab{'data-tab': person.id, id: "#{person.id}-tab-content"}
